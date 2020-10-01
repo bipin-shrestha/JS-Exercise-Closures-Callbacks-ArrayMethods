@@ -29,8 +29,7 @@ console.log(processFirstItem(['foo', 'bar'], (str) => str + str));
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
- *  -counter1 has 2 closures but counter2 has 1 closure which means counter2 takes more memory space than counter 1.
- *  
+ *  -counter1 doen't require any scope since it declared count inside the function whereas counter2 has decleared count outside function so it used scope to know about the count.  
  * 2. Which of the two uses a closure? How can you tell?
  *  -counter1 used the closure. because it has innerfunction that mutates the count variable.
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
