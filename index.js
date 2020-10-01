@@ -13,10 +13,12 @@
  * Example of usage of this higher-order function:
  * Invoking `processFirstItem` passing `['foo', 'bar']` and `(str) => str + str`,
  * should return 'foofoo'.
-*/
+ */
 function processFirstItem(stringList, callback) {
-  return callback(stringList[0])
+    return callback(stringList[0])
 }
+processFirstItem(['foo', 'bar'], (str) => str + str);
+console.log(processFirstItem(['foo', 'bar'], (str) => str + str));
 
 // ⭐️ Example Challenge END ⭐️
 
@@ -27,19 +29,20 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
- * 
+ *  -counter1 has 2 closures but counter2 has 1 closure which means counter2 takes more memory space than counter 1.
+ *  
  * 2. Which of the two uses a closure? How can you tell?
- * 
+ *  -counter1 used the closure. because it has innerfunction that mutates the count variable.
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
- *
-*/
+ *  - counter 1 is preferable when you have to mutate functional scope variable and counter 2 is better if you have to make a single call.
+ */
 
 // counter1 code
 function counterMaker() {
-  let count = 0;
-  return function counter() {
-    count++;
-  }
+    let count = 0;
+    return function counter() {
+        count++;
+    }
 }
 
 const counter1 = counterMaker();
@@ -48,7 +51,7 @@ const counter1 = counterMaker();
 let count = 0;
 
 function counter2() {
-  return count++;
+    return count++;
 }
 
 
@@ -56,15 +59,17 @@ function counter2() {
 
 Write a function called `inning` that generates a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
 
-function inning(/*Code Here*/){
-
-    /*Code Here*/
-
+function inning() {
+    const score = Math.floor(Math.random() * 3);
+    return score;
 }
+console.log(inning());
+
 
 /* Task 3: finalScore()
 
-Write a higher order function called `finalScore` that accepts the callback function `inning` (from above) and a number of innings and and returns the final score of the game in the form of an object.
+Write a higher order function called `finalScore` that accepts the callback function `inning` (from above) and a number of innings and and returns the final score of the game
+ in the form of an object.
 
 For example, 
 
@@ -74,13 +79,26 @@ finalScore(inning, 9) might return:
   "Away": 5,
 }
 
-*/ 
+*/
 
-function finalScore(/*code Here*/){
+function finalScore(cb, innings) {
+    let score = {
+        "Home": 0,
+        "Away": 0,
+    }
+    let homeScore = 0;
+    let awayScore = 0;
 
-  /*Code Here*/
-
+    for (let i = 0; i < innings; i++) {
+        homeScore += cb();
+        awayScore += cb();
+    }
+    score.Home = homeScore;
+    score.Away = awayScore;
+    return score;
 }
+
+console.log(finalScore(inning, 9));
 
 /* Task 4: 
 
@@ -104,8 +122,29 @@ and returns the score at each pont in the game, like so:
 
 Final Score: awayTeam - homeTeam */
 
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function getInningScore(inningCounter, homeScore, awayScore) {
+    if (inningCounter == 1) {
+        return "1st inning: " + awayScore + " - " + homeScore;
+    } else if (inningCounter == 2) {
+        return "2nd inning: " + awayScore + " - " + homeScore;
+    } else if (inningCounter == 3) {
+        return "3rd inning: " + awayScore + " - " + homeScore;
+    } else {
+        return inningCounter + "th inning: " + awayScore + " - " + homeScore;
+    }
 }
 
+function scoreboard(cb1, cb2, number) {
+    let homefinalScore = 0;
+    let awayfinalScore = 0;
+    for (let i = 1; i <= number; i++) {
+        const homeScore = cb2();
+        const awayScore = cb2();
+        console.log(cb1(i, homeScore, awayScore));
+        homefinalScore += homeScore;
+        awayfinalScore += awayScore;
+    }
+    console.log("Final Score: " + awayfinalScore + " " + homefinalScore);
+}
 
+scoreboard(getInningScore, inning, 9);
